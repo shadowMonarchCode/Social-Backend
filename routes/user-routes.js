@@ -13,11 +13,15 @@ router.post(
     check("email")
       .normalizeEmail() // Test@Test.com => test@test.com
       .isEmail(),
-    check("password").trim().isLength({ min: 6 }),
+    check("password").isLength({ min: 6 }),
   ],
   userController.registerUser
 );
 
-router.post("/login", userController.loginUser);
+router.post(
+  "/login",
+  [check("email").normalizeEmail()],
+  userController.loginUser
+);
 
 module.exports = router;

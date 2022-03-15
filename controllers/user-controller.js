@@ -5,7 +5,6 @@ const User = require("../models/user");
 
 //Register User
 const registerUser = async (req, res, next) => {
-
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return next(new HttpError("Invalid input passed, please try again.", 403));
@@ -18,7 +17,7 @@ const registerUser = async (req, res, next) => {
     existingUser = await User.findOne({ email: email });
   } catch (err) {
     const error = new HttpError(
-      "User registeration failed,please try again later.",
+      "User registeration failed, please try again later.",
       500
     );
     return next(error);
@@ -49,7 +48,7 @@ const registerUser = async (req, res, next) => {
     await createdUser.save();
   } catch (err) {
     const error = new HttpError(
-      "User registeration failed,please try again later.",
+      "User registeration failed, please try again later.",
       500
     );
     return next(error);
@@ -65,7 +64,7 @@ const registerUser = async (req, res, next) => {
     );
   } catch (err) {
     const error = new HttpError(
-      "User registeration failed,please try again later.",
+      "User registeration failed, please try again later.",
       500
     );
     return next(error);
@@ -77,10 +76,8 @@ const registerUser = async (req, res, next) => {
     token: token,
   });
 };
-
 exports.registerUser = registerUser;
 
 //Login User
 const loginUser = (req, res, next) => {};
-
 exports.loginUser = loginUser;
