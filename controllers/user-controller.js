@@ -45,8 +45,8 @@ const registerUser = async (req, res, next) => {
     lastName,
     about,
     email,
-    encry_password: password,
-    salt: "",
+    password:hashedPassword,
+    // salt: "",
     posts: [],
     todo: [],
   });
