@@ -34,14 +34,8 @@ const userSchema = new mongoose.Schema(
     // //   type: Number,
     // //   default: 0,
     // // },
-    posts: {
-      type: Array,
-      default: [],
-    },
-    todo: {
-      type: Array,
-      default: [],
-    },
+    posts: [{ type: mongoose.Types.ObjectId, required: true, ref: "Post" }],
+    todos: [{ type: mongoose.Types.ObjectId, required: true, ref: "Todo" }],
   },
   { timestamps: true }
 );
