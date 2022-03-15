@@ -18,6 +18,8 @@
     "express-validator": "^6.14.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.2.6",
-    "mongoose-unique-validator": "^3.0.0"
+    "mongoose-unique-validator": "^3.0.0",
+    "nodemon": "^2.0.15",
+    "uuid": "^8.3.2"
   }
 }
