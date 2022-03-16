@@ -1,4 +1,5 @@
 const User = require("../models/user");
+const HttpError = require("../models/http-error");
 const { validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 const expressJwt = require("express-jwt");
@@ -16,18 +17,37 @@ exports.register = (req, res) => {
     });
   }
 
+  // * Saving user in a database
   const user = new User(req.body);
   user.save((err, user) => {
     if (err) {
-        console.log(err);
       return res.status(400).json({
         err: "NOT ABLE TO SAVE USER IN DB",
       });
     }
+
+    // * Creating a token for user
+    let token;
+    try {
+      token = jwt.sign(
+        {
+          _id: user._id,
+        },
+        process.env.SECRET
+      );
+    } catch (err) {
+      const error = new HttpError(
+        "User registration failed, please try again later.",
+        500
+      );
+      return next(error);
+    }
+
     res.json({
       id: user._id,
       name: user.firstName,
       email: user.email,
+      token: token,
     });
   });
 };
@@ -59,26 +79,35 @@ exports.login = (req, res) => {
     }
 
     // * Create a token
-    const token = jwt.sign(
-      {
-        _id: user._id,
-      },
-      process.env.SECRET
-    );
+    let token;
+    try {
+      token = jwt.sign(
+        {
+          _id: user._id,
+        },
+        process.env.SECRET
+      );
+    } catch (err) {
+      const error = new HttpError(
+        "User registration failed, please try again later.",
+        500
+      );
+      return next(error);
+    }
 
-    // * Put tokken in a cookie
+    // * Put token in a cookie
     res.cookie("token", token, {
-      expire: new Date() + 9999,
+      maxAge: 24 * 3600 * 1000, // * 1 day
     });
 
-    // * Send token to front end
+    // * Send token to front-end
     const { _id, firstName, email } = user;
     return res.json({
       token,
       user: {
         _id,
         firstName,
-        email
+        email,
       },
     });
   });
